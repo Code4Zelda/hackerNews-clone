@@ -7,7 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient, HttpLink, InMemoryCache } from "apollo-boost";
 
-const httpLink = HttpLink({
+const httpLink = new HttpLink({
   uri: "http://localhost:4000",
 });
 
@@ -19,9 +19,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </ApolloProvider>,
   document.getElementById("root")
 );

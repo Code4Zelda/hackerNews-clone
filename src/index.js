@@ -6,9 +6,11 @@ import * as serviceWorker from "./serviceWorker";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient, HttpLink, InMemoryCache } from "apollo-boost";
+import dotenv from "dotenv";
+dotenv.config();
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000",
+  uri: process.env.GRAHPQL_SERVER,
 });
 
 // 3

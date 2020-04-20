@@ -1,4 +1,4 @@
-const typeDefs = `
+const typeDefs = ` 
 type Query {
   info: String!
   feed(filter: String, skip: Int, first: Int, orderBy: LinkOrderByInput): Feed!
@@ -21,7 +21,7 @@ type Link {
   description: String!
   url: String!
   postedBy: User
-  votes:[Vote]!
+  votes: [Vote]!
 }
 type AuthPayload {
   token: String
@@ -33,7 +33,6 @@ type User {
   name: String!
   email: String!
   links: [Link!]!
-
 }
 
 type Subscription {
@@ -43,7 +42,7 @@ type Subscription {
 
 type Vote {
   id: ID!
-  link:Link!
+  link: Link!
   user: User!
 }
 
@@ -54,7 +53,6 @@ enum LinkOrderByInput {
   url_DESC
   createdAt_ASC
   createdAt_DESC
-}
-`;
+}`;
 
 module.exports = { typeDefs };

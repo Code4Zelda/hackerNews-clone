@@ -5,6 +5,7 @@ import { Switch, Route } from "react-router-dom";
 import PostList from "../views/PostList";
 import CreateLink from "../views/CreateLink";
 import Login from "../views/Login";
+import Search from "../views/Search";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route exact path="/" component={PostList} />
           <Route exact path="/create" component={CreateLink} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/search" component={Search} />
         </Switch>
       </div>
     </div>

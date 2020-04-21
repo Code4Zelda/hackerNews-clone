@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "apollo-boost": "^0.4.7",
+    "apollo-link-context": "^1.0.20",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "graphql-yoga": "^1.18.3",

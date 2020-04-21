@@ -3,6 +3,8 @@ import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
 import { withApollo } from "@apollo/react-hoc";
 import { useHistory } from "react-router-dom";
+import { Mutation } from "react-apollo";
+import { FEED_QUERY } from "./PostList";
 
 const POST_MUTATION = gql`
   mutation PostMutation($description: String!, $url: String!) {
@@ -18,22 +20,9 @@ const POST_MUTATION = gql`
 const CreateLink = () => {
   const [description, setDescription] = React.useState("");
   const [url, setUrl] = React.useState("");
-  const [error, setError] = React.useState("");
-  const [submitPost] = useMutation(POST_MUTATION);
-  const history = useHistory();
-
-  const handleSumbit = () => {
-    submitPost({
-      variables: { description, url },
-      //   refetchQueries: [{ query: POSTS_LIST }],
-    }).catch(function(error) {
-      console.log(error);
-      setError(error.toString());
-    });
-    setDescription("");
-    setUrl("");
-    history.push("/");
-  };
+  // const [error, setError] = React.useState("");
+  // const [submitPost] = useMutation(POST_MUTATION);
+  // const history = useHistory();
 
   return (
     <div>
@@ -53,8 +42,21 @@ const CreateLink = () => {
           placeholder="The URL for the link"
         />
       </div>
-      <button onClick={() => handleSumbit()}>Submit</button>
-      {error}
+      <Mutation
+        mutation={POST_MUTATION}
+        variables={{ description, url }}
+        onCompleted={() => this.props.history.push("/")}
+        update={(store, { data: { post } }) => {
+          const data = store.readQuery({ query: FEED_QUERY });
+          data.feed.links.unshift(post);
+          store.writeQuery({
+            query: FEED_QUERY,
+            data,
+          });
+        }}
+      >
+        {(postMutation) => <button onClick={postMutation}>Submit</button>}
+      </Mutation>
     </div>
   );
 };

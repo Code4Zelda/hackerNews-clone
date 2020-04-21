@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import { withApollo } from "@apollo/react-hoc";
 
-const FEED_QUERY = gql`
+export const FEED_QUERY = gql`
   {
     feed {
       links {
@@ -12,10 +12,29 @@ const FEED_QUERY = gql`
         createdAt
         url
         description
+        postedBy {
+          id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
       }
     }
   }
 `;
+
+const _updateCacheAfterVote = (store, createVote, linkId) => {
+  const data = store.readQuery({ query: FEED_QUERY });
+
+  const votedLink = data.feed.links.find((link) => link.id === linkId);
+  votedLink.votes = createVote.link.votes;
+
+  store.writeQuery({ query: FEED_QUERY, data });
+};
 
 const PostList = () => {
   const { loading, data, error } = useQuery(FEED_QUERY);
@@ -29,8 +48,13 @@ const PostList = () => {
 
   return (
     <div>
-      {data.feed.links.map((link) => (
-        <Post key={link.id} link={link} />
+      {data.feed.links.map((link, index) => (
+        <Post
+          key={link.id}
+          link={link}
+          index={index}
+          updateStoreAfterVote={_updateCacheAfterVote}
+        />
       ))}
     </div>
   );

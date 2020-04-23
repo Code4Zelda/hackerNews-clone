@@ -1,12 +1,10 @@
 import React from "react";
 import Post from "../components/Post";
-import { useQuery } from "@apollo/react-hooks";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 import { withApollo } from "@apollo/react-hoc";
 import { LINKS_PER_PAGE } from "../constant";
 
-//  needs  createdAt
 export const FEED_QUERY = gql`
   query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
     feed(first: $first, skip: $skip, orderBy: $orderBy) {
@@ -30,7 +28,7 @@ export const FEED_QUERY = gql`
     }
   }
 `;
-// needs createAt
+
 const NEW_LINKS_SUBSCRIPTION = gql`
   subscription {
     newLink {
@@ -51,7 +49,7 @@ const NEW_LINKS_SUBSCRIPTION = gql`
     }
   }
 `;
-//  needs createdAt
+
 const NEW_VOTES_SUBSCRIPTION = gql`
   subscription {
     newVote {
@@ -90,7 +88,7 @@ const PostList = (props) => {
     return { first, skip, orderBy };
   };
 
-  // LOOK FOR NEW UPdates for links
+  // LOOK FOR NEW UPdates for post
   const _subscribeToNewLinks = (subscribeToMore) => {
     subscribeToMore({
       document: NEW_LINKS_SUBSCRIPTION,
@@ -118,6 +116,7 @@ const PostList = (props) => {
     });
   };
 
+  // caching changes in store made by votes
   const _updateCacheAfterVote = (store, createVote, linkId) => {
     const isNewPage = props.location.pathname.includes("new");
     const page = parseInt(props.match.params.page, 10);
@@ -137,11 +136,13 @@ const PostList = (props) => {
     store.writeQuery({ query: FEED_QUERY, data });
   };
 
+  // post from database
   const _getLinksToRender = (data) => {
     const isNewPage = props.location.pathname.includes("new");
     if (isNewPage) {
       return data.feed.links;
     }
+    // post will top votes
     const rankedLinks = data.feed.links.slice();
     rankedLinks.sort((l1, l2) => l2.votes.length - l1.votes.length);
     return rankedLinks;
@@ -166,11 +167,10 @@ const PostList = (props) => {
   return (
     <Query query={FEED_QUERY} variables={_getQueryVariables()}>
       {({ loading, error, data, subscribeToMore }) => {
-        console.log(data);
         if (loading) return <div>Loading...</div>;
-        console.log(error);
+
         if (error) return <div>Error</div>;
-        console.log(data);
+
         _subscribeToNewLinks(subscribeToMore);
         _subscribeToNewVotes(subscribeToMore);
 

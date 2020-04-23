@@ -1,7 +1,6 @@
 import React from "react";
 import { gql } from "apollo-boost";
 import { Mutation } from "react-apollo";
-import { useMutation } from "@apollo/react-hooks";
 import { withApollo } from "@apollo/react-hoc";
 import { AUTH_TOKEN } from "../constant";
 import { useHistory } from "react-router";
@@ -35,7 +34,7 @@ const Login = () => {
       _saveUserData(token);
       history.push(`/`);
     } catch (error) {
-      alert(`Please, fill out form!`);
+      alert(`Incorrect Email or Password!`);
     }
   };
 

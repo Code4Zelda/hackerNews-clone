@@ -30,17 +30,18 @@ const Login = () => {
   const history = useHistory();
 
   const _confirm = async (data) => {
-    const { token } = login ? data.login : data.signup;
-    _saveUserData(token);
-    history.push(`/`);
+    try {
+      const { token } = login ? data.login : data.signup;
+      _saveUserData(token);
+      history.push(`/`);
+    } catch (error) {
+      alert(`Please, fill out form!`);
+    }
   };
 
   const _saveUserData = (token) => {
     localStorage.setItem(AUTH_TOKEN, token);
   };
-
-  const [SIGNUP] = useMutation(SIGNUP_MUTATION);
-  const [LOGIN] = useMutation(LOGIN_MUTATION);
 
   return (
     <div>

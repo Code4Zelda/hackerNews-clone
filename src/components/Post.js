@@ -38,7 +38,7 @@ const Post = (props) => {
         {authToken && (
           <Mutation
             mutation={VOTE_MUTATION}
-            variables={{ linkId: this.props.link.id }}
+            variables={{ linkId: props.link.id }}
             update={(store, { data: { vote } }) =>
               props.updateStoreAfterVote(store, vote, props.link.id)
             }

@@ -10,7 +10,7 @@ const getUserId = (context) => {
     return userId;
   }
 
-  throw new Error("Not authenticated");
+  return alert("Not authenticated");
 };
 
 module.exports = {

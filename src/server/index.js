@@ -28,12 +28,13 @@ const server = new GraphQLServer({
     };
   },
 });
-server.start(
-  // {
-  //   cors: {
-  //     credentials: true,
-  //     origin: ["http://localhost:3000"],
-  //   },
-  // },
-  () => console.log(`Server is running on PORT ${process.env.GRAPHQL_PORT}`)
+
+const options = {
+  port: 8000,
+  endpoint: "/graphql",
+  subscriptions: "/subscriptions",
+  playground: "/playground",
+};
+server.start(options, ({ port }) =>
+  console.log(`Server is running on PORT ${port}`)
 );

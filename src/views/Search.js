@@ -4,6 +4,7 @@ import Post from "../components/Post";
 import { useQuery } from "@apollo/react-hooks";
 import { withApollo } from "@apollo/react-hoc";
 
+// createdAt
 const FEED_SEARCH_QUERY = gql`
   query FeedSearchQuery($filter: String!) {
     feed(filter: $filter) {
@@ -11,7 +12,7 @@ const FEED_SEARCH_QUERY = gql`
         id
         url
         description
-        createdAt
+
         postedBy {
           id
           name
@@ -35,14 +36,13 @@ const Search = () => {
     variables: { filter },
   });
 
-  const _executeSearch = () => {
-    if (loading) {
-      return "Loading...";
-    }
-    if (error) {
-      return <div>{error.message}</div>;
-    }
+  const _executeSearch = async () => {
+    if (loading) return <div>"Loading..."</div>;
+
+    if (error) return <div>{error.message}</div>;
+
     const links = data.feed.links;
+    if (!links) return <div>No Post</div>;
     setLink(links);
   };
 

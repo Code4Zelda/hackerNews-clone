@@ -5,6 +5,7 @@ import { withApollo } from "@apollo/react-hoc";
 import { useHistory } from "react-router-dom";
 import { Mutation } from "react-apollo";
 import { FEED_QUERY } from "./PostList";
+import { LINKS_PER_PAGE } from "../constant";
 
 const POST_MUTATION = gql`
   mutation PostMutation($description: String!, $url: String!) {
@@ -17,12 +18,9 @@ const POST_MUTATION = gql`
   }
 `;
 
-const CreateLink = () => {
+const CreateLink = (props) => {
   const [description, setDescription] = React.useState("");
   const [url, setUrl] = React.useState("");
-  // const [error, setError] = React.useState("");
-  // const [submitPost] = useMutation(POST_MUTATION);
-  // const history = useHistory();
 
   return (
     <div>
@@ -32,26 +30,33 @@ const CreateLink = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           type="text"
-          placeholder="A description for the link"
+          placeholder="A description for the post"
         />
         <input
           className="mb2"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           type="text"
-          placeholder="The URL for the link"
+          placeholder="The URL for the post"
         />
       </div>
       <Mutation
         mutation={POST_MUTATION}
         variables={{ description, url }}
-        onCompleted={() => this.props.history.push("/")}
+        onCompleted={() => props.history.push("/new/1")}
         update={(store, { data: { post } }) => {
-          const data = store.readQuery({ query: FEED_QUERY });
+          const first = LINKS_PER_PAGE;
+          const skip = 0;
+          const orderBy = "createdAt_DESC";
+          const data = store.readQuery({
+            query: FEED_QUERY,
+            variables: { first, skip, orderBy },
+          });
           data.feed.links.unshift(post);
           store.writeQuery({
             query: FEED_QUERY,
             data,
+            variables: { first, skip, orderBy },
           });
         }}
       >
@@ -62,54 +67,3 @@ const CreateLink = () => {
 };
 
 export default withApollo(CreateLink);
-
-// import React, { Component } from "react";
-// import { Mutation } from "react-apollo";
-// import gql from "graphql-tag";
-
-// const POST_MUTATION = gql`
-//   mutation PostMutation($description: String!, $url: String!) {
-//     post(url: $url, description: $description) {
-//       id
-//       createdAt
-//       url
-//       description
-//     }
-//   }
-// `;
-
-// class CreateLink extends Component {
-//   state = {
-//     description: "",
-//     url: "",
-//   };
-
-//   render() {
-//     const { description, url } = this.state;
-//     return (
-//       <div>
-//         <div className="flex flex-column mt3">
-//           <input
-//             className="mb2"
-//             value={description}
-//             onChange={(e) => this.setState({ description: e.target.value })}
-//             type="text"
-//             placeholder="A description for the link"
-//           />
-//           <input
-//             className="mb2"
-//             value={url}
-//             onChange={(e) => this.setState({ url: e.target.value })}
-//             type="text"
-//             placeholder="The URL for the link"
-//           />
-//         </div>
-//         <Mutation mutation={POST_MUTATION} variables={{ description, url }}>
-//           {(postMutation) => <button onClick={postMutation}>Submit</button>}
-//         </Mutation>
-//       </div>
-//     );
-//   }
-// }
-
-// export default CreateLink;

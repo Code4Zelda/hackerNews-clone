@@ -1,9 +1,7 @@
 import React from "react";
 import { AUTH_TOKEN } from "../constant";
 import { timeDifferenceForDate } from "../utils";
-import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import { withApollo } from "@apollo/react-hoc";
 import { Mutation } from "react-apollo";
 
 const VOTE_MUTATION = gql`
@@ -28,8 +26,6 @@ const VOTE_MUTATION = gql`
 
 const Post = (props) => {
   const authToken = localStorage.getItem(AUTH_TOKEN);
-
-  const _voteForLink = () => {};
 
   return (
     <div className="flex mt2 items-start">

@@ -12,7 +12,7 @@ export const FEED_QUERY = gql`
     feed(first: $first, skip: $skip, orderBy: $orderBy) {
       links {
         id
-
+        createdAt
         url
         description
         postedBy {
@@ -37,7 +37,7 @@ const NEW_LINKS_SUBSCRIPTION = gql`
       id
       url
       description
-
+      createdAt
       postedBy {
         id
         name
@@ -60,7 +60,7 @@ const NEW_VOTES_SUBSCRIPTION = gql`
         id
         url
         description
-
+        createdAt
         postedBy {
           id
           name

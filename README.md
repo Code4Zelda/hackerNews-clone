@@ -1,4 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+***HACKER NEWS SERVER IS IN SEPARATE REPO****
 
 ### Features
 - Display a list of links 😎
